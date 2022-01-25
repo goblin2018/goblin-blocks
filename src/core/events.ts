@@ -1,4 +1,6 @@
 import AbstractEvents from './abstractEvents'
+import {v4 as uuidv4} from 'uuid';
+;
 
 export const EventType = {
   Create: 'CREATE',
@@ -122,7 +124,7 @@ class Events {
   // TODO: 修改此接口，参数可为bool 或者string
   setGroup = (state: boolean | string) => {
     if (typeof state === 'boolean') {
-      Events.group = state ? Utils.genUid() : ''
+      Events.group = state ? uuidv4() : ''
     } else {
       Events.group = state
     }
@@ -138,7 +140,7 @@ class Events {
     return ids
   }
 
-  fromJson = (json, workspace) => {
+  fromJson = (json: any, workspace: any) => {
     var event
     switch (json.type) {
       case EventType.Create:
@@ -192,7 +194,7 @@ class Events {
   }
 
   disableOrphans = (event: AbstractEvents) => {
-    if (event.type == EventType.Move || event.type == EventType.Create) {
+    if (event.type === EventType.Move || event.type === EventType.Create) {
       this.disable()
       var workspace = Workspace.getById(event.workspaceID)
       var block = workspace.getBlockById(event.blockId)
